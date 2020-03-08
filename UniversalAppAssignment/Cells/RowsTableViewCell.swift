@@ -58,6 +58,13 @@ class RowsTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
+        let deviceType = self.traitCollection.userInterfaceIdiom
+        if deviceType == .phone {
+            
+        }else {
+            
+        }
+        
         self.contentView.addSubview(ImgVwRows)
         containerView.addSubview(stackView)
         self.contentView.addSubview(containerView)
@@ -67,7 +74,7 @@ class RowsTableViewCell: UITableViewCell {
         ImgVwRows.widthAnchor.constraint(equalToConstant:40).isActive = true
         ImgVwRows.heightAnchor.constraint(equalToConstant:40).isActive = true
         
-      containerView.centerYAnchor.constraint(equalTo:self.contentView.centerYAnchor).isActive = true
+        containerView.centerYAnchor.constraint(equalTo:self.contentView.centerYAnchor).isActive = true
         containerView.topAnchor.constraint(equalTo: self.contentView.topAnchor).isActive = true
         containerView.leadingAnchor.constraint(equalTo:self.ImgVwRows.trailingAnchor, constant:10).isActive = true
         

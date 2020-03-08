@@ -15,6 +15,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     private var rowListVM: RowListViewModel!
     
     var refreshControl = UIRefreshControl()
+    var refreshCount = 1
+    var dataShow = 7
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,17 +49,24 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
         rowsTableView.register(RowsTableViewCell.self, forCellReuseIdentifier: ConstantData.rowsCell)
         
-        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
+        refreshControl.attributedTitle = NSAttributedString(string: ConstantData.pulltorefresh)
         refreshControl.addTarget(self, action: #selector(refresh), for: UIControl.Event.valueChanged)
         rowsTableView.addSubview(refreshControl) // not required when using UITableViewController
 
     }
     
-    //MARK:- Refresh Function
+    //MARK:- Pull To Refresh Function
     
     @objc func refresh(sender:AnyObject) {
        // Code to refresh table view
-        
+        if refreshCount == 1 {
+            refreshCount += 1
+            dataShow = dataShow * refreshCount
+            self.rowsTableView.reloadData()
+        } else {
+            
+        }
+        refreshControl.endRefreshing()
     }
     
     //MARK:- Fetch Response
@@ -84,13 +94,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
-        return self.rowListVM.numberOfRowsInSection(section)
+        return dataShow
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
-//        let cell = tableView.dequeueReusableCell(withIdentifier: ConstantData.rowsCell, for: indexPath) as! RowsTableViewCell
-
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ConstantData.rowsCell, for: indexPath) as? RowsTableViewCell else {
             fatalError("RowsTableViewCell not found")
         }
@@ -116,13 +123,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return cell
     }
     
-    func tableView(_ tableView: UITableView,heightForRowAt indexPath:IndexPath) -> CGFloat
-    {
+    func tableView(_ tableView: UITableView,heightForRowAt indexPath:IndexPath) -> CGFloat{
         return UITableView.automaticDimension
     }
 
 }
 
+//MARK:- Convert Image URL into Data
 extension UIImage {
     convenience init?(url: URL?) {
         guard let url = url else { return nil }
@@ -136,7 +143,7 @@ extension UIImage {
     }
 }
 
-
+//MARK:- Network Checking
 extension UIViewController {
     func showInterConnectionNotAvailablityError() {
         let alert = UIAlertController(title: ConstantData.internetConnectionError, message: ConstantData.checkConnection, preferredStyle: UIAlertController.Style.alert)
@@ -149,6 +156,7 @@ extension UIViewController {
     }
 }
 
+//MARK:- Display, Remove Spinner
 extension UIViewController {
     class func displaySpinner(onView : UIView) -> UIView {
         let spinnerView = UIView.init(frame: onView.bounds)
