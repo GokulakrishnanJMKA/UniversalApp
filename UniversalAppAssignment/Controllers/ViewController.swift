@@ -26,7 +26,7 @@ class ViewController: UIViewController {
         if NetworkManagerConnectivity.networkManagerConnectivity.isConnectedToInternet{
             getResponse()
         }else {
-            showInterConnectionNotAvailablityError()
+            showNetworkAlert()
         }
     }
     
@@ -131,7 +131,7 @@ extension UIImage {
 
 //MARK:- Network Checking
 extension UIViewController {
-    func showInterConnectionNotAvailablityError() {
+    func showNetworkAlert() {
         let alert = UIAlertController(title: ConstantData.internetConnectionError, message: ConstantData.checkConnection, preferredStyle: UIAlertController.Style.alert)
         let okAction = UIAlertAction(title: ConstantData.ok, style: UIAlertAction.Style.cancel) {
                        UIAlertAction in
