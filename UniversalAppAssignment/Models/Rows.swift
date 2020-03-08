@@ -13,11 +13,7 @@ struct RowList: Decodable {
     let rows: [Row]
 }
 
-struct Row: Decodable {
-//    let title: String
-//    let description: String
-//    let imageHref: String
-    
+struct Row: Decodable {    
     let title, rowDescription: String?
     let imageHref: String?
 

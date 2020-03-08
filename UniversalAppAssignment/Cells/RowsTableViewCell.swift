@@ -13,7 +13,7 @@ class RowsTableViewCell: UITableViewCell {
     let containerView:UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.clipsToBounds = true // this will make sure its children do not go out of the boundary
+        view.clipsToBounds = true
         return view
     }()
     
@@ -29,8 +29,8 @@ class RowsTableViewCell: UITableViewCell {
     
     let ImgVwRows:UIImageView = {
         let img = UIImageView()
-        img.contentMode = .scaleAspectFill // image will never be strecthed vertially or horizontally
-        img.translatesAutoresizingMaskIntoConstraints = false // enable autolayout
+        img.contentMode = .scaleAspectFill
+        img.translatesAutoresizingMaskIntoConstraints = false
         img.layer.cornerRadius = 20
         img.clipsToBounds = true
         return img
@@ -58,13 +58,6 @@ class RowsTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        let deviceType = self.traitCollection.userInterfaceIdiom
-        if deviceType == .phone {
-            
-        }else {
-            
-        }
-        
         self.contentView.addSubview(ImgVwRows)
         containerView.addSubview(stackView)
         self.contentView.addSubview(containerView)
@@ -80,7 +73,6 @@ class RowsTableViewCell: UITableViewCell {
         
         containerView.trailingAnchor.constraint(equalTo:self.contentView.trailingAnchor, constant:-10).isActive = true
         containerView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor).isActive = true
-//        containerView.heightAnchor.constraint(equalToConstant:40).isActive = true
         
         stackView.topAnchor.constraint(equalTo:self.containerView.topAnchor).isActive = true
         stackView.leadingAnchor.constraint(equalTo:self.containerView.leadingAnchor).isActive = true
@@ -92,7 +84,6 @@ class RowsTableViewCell: UITableViewCell {
         
         lblTitle.setContentHuggingPriority(UILayoutPriority.defaultLow, for:.vertical)
         lblDescription.setContentHuggingPriority(UILayoutPriority.defaultHigh, for:.vertical)
-
     }
         
     required init?(coder aDecoder: NSCoder) {

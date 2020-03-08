@@ -17,13 +17,10 @@ class Webservice {
                 completion(nil)
             } else if data != nil {
                 if let url = Bundle.main.url(forResource: ConstantData.universal, withExtension: ConstantData.json) {
-//                let jsonData = ConstantData.JSON.data(using: .utf8)!
                     var jsonData = Data()
                     do {
                           jsonData = try Data(contentsOf: url)
-                          // make sure this JSON is in the format we expect
                           if let json = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String:Any] {
-                          // try to read out a string array
                             if let title = json[ConstantData.titleHead] as? String {
                             ConstantData.navigationTitle = title
                           }

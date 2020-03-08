@@ -11,7 +11,7 @@ import Foundation
 struct ConstantData {
     static let url = "https://dl.dropboxusercontent.com/s/2iodh4vg0eortkl/facts.json"
     static let rowsCell = "rowsCell"
-    static let noimageavialable = "NoImageAvailable.png"
+    static let noImageAvialable = "NoImageAvailable.png"
     static var navigationTitle = ""
     static let titleHead = "title"
     static let rows = "rows"
@@ -25,6 +25,7 @@ struct ConstantData {
     static let universal = "universal"
     static let json = "json"
     static let FailedToLoad = "Failed to load:"
-    static let pulltorefresh = "Pull to refresh"
+    static let pullToRefresh = "Pull to refresh"
+    static let cellNotFound = "RowsTableViewCell not found"
 }
 

@@ -9,9 +9,9 @@
 import UIKit
 
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate {
+class ViewController: UIViewController {
 
-    let rowsTableView = UITableView()
+    let tableViewRows = UITableView()
     private var rowListVM: RowListViewModel!
     
     var refreshControl = UIRefreshControl()
@@ -21,56 +21,43 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         view.backgroundColor = .white
-        setAutoLayoutForTableViewRows()
+        setTableViewConstraints()
         if NetworkManagerConnectivity.networkManagerConnectivity.isConnectedToInternet{
-           getResponse()
+            getResponse()
         }else {
-          showInterConnectionNotAvailablityError()
+            showInterConnectionNotAvailablityError()
         }
     }
     
-    //MARK:- UITableView creation and auto layout setting
-    
-    func setAutoLayoutForTableViewRows() {
-        view.addSubview(rowsTableView)
-        rowsTableView.translatesAutoresizingMaskIntoConstraints = false
+    //MARK:- UITableView Creation and AutoLayout Constraint Setting
+    func setTableViewConstraints() {
+        view.addSubview(tableViewRows)
+        tableViewRows.translatesAutoresizingMaskIntoConstraints = false
         if #available(iOS 11.0, *) {
-        rowsTableView.topAnchor.constraint(equalTo:view.safeAreaLayoutGuide.topAnchor).isActive = true
-        rowsTableView.leftAnchor.constraint(equalTo:view.safeAreaLayoutGuide.leftAnchor).isActive = true
-        rowsTableView.rightAnchor.constraint(equalTo:view.safeAreaLayoutGuide.rightAnchor).isActive = true
-        rowsTableView.bottomAnchor.constraint(equalTo:view.safeAreaLayoutGuide.bottomAnchor).isActive = true
-        } else {
-            // Fallback on earlier versions
+            tableViewRows.topAnchor.constraint(equalTo:view.safeAreaLayoutGuide.topAnchor).isActive = true
+            tableViewRows.leftAnchor.constraint(equalTo:view.safeAreaLayoutGuide.leftAnchor).isActive = true
+            tableViewRows.rightAnchor.constraint(equalTo:view.safeAreaLayoutGuide.rightAnchor).isActive = true
+            tableViewRows.bottomAnchor.constraint(equalTo:view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         }
-        rowsTableView.dataSource = self
-        rowsTableView.delegate = self
-
-        rowsTableView.register(RowsTableViewCell.self, forCellReuseIdentifier: ConstantData.rowsCell)
-        
-        refreshControl.attributedTitle = NSAttributedString(string: ConstantData.pulltorefresh)
+        tableViewRows.dataSource = self
+        tableViewRows.register(RowsTableViewCell.self, forCellReuseIdentifier: ConstantData.rowsCell)
+        refreshControl.attributedTitle = NSAttributedString(string: ConstantData.pullToRefresh)
         refreshControl.addTarget(self, action: #selector(refresh), for: UIControl.Event.valueChanged)
-        rowsTableView.addSubview(refreshControl) // not required when using UITableViewController
-
+        tableViewRows.addSubview(refreshControl)
     }
     
     //MARK:- Pull To Refresh Function
-    
     @objc func refresh(sender:AnyObject) {
-       // Code to refresh table view
         if refreshCount == 1 {
             refreshCount += 1
             dataShow = dataShow * refreshCount
-            self.rowsTableView.reloadData()
-        } else {
-            
+            self.tableViewRows.reloadData()
         }
         refreshControl.endRefreshing()
     }
     
     //MARK:- Fetch Response
-    
     private func getResponse() {
         let url = URL(string: ConstantData.url)!
         let sv = UIViewController.displaySpinner(onView: self.view)
@@ -79,16 +66,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                    self.rowListVM = RowListViewModel(rows: rows)
                    DispatchQueue.main.async {
                     self.navigationItem.title = ConstantData.navigationTitle
-                       self.rowsTableView.reloadData()
+                       self.tableViewRows.reloadData()
                        UIViewController.removeSpinner(spinner: sv)
                     }
               }
          }
     }
+}
     
-    
-    //MARK:- UITableView datasource
-    
+//MARK:- UITableView datasource
+extension ViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return self.rowListVM == nil ? 0 : self.rowListVM.numberOfSections
     }
@@ -99,7 +86,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ConstantData.rowsCell, for: indexPath) as? RowsTableViewCell else {
-            fatalError("RowsTableViewCell not found")
+            fatalError(ConstantData.cellNotFound)
         }
 
         let rowVM = self.rowListVM.rowAtIndex(indexPath.row)
@@ -117,7 +104,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         if rowVM.imageHref.count > 0 {
             cell.ImgVwRows.image = UIImage(url: URL(string: rowVM.imageHref))
         }else {
-            cell.ImgVwRows.image = UIImage(named: ConstantData.noimageavialable)
+            cell.ImgVwRows.image = UIImage(named: ConstantData.noImageAvialable)
         }
         
         return cell
@@ -126,9 +113,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func tableView(_ tableView: UITableView,heightForRowAt indexPath:IndexPath) -> CGFloat{
         return UITableView.automaticDimension
     }
-
 }
-
+    
 //MARK:- Convert Image URL into Data
 extension UIImage {
     convenience init?(url: URL?) {
@@ -165,7 +151,6 @@ extension UIViewController {
         if #available(iOS 13.0, *) {
              ai = UIActivityIndicatorView.init(style: .large)
         } else {
-            // Fallback on earlier versions
             ai = UIActivityIndicatorView.init(style: UIActivityIndicatorView.Style.whiteLarge)
         }
         ai.startAnimating()

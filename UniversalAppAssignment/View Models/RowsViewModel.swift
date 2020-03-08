@@ -13,7 +13,6 @@ struct RowListViewModel {
 }
 
 extension RowListViewModel {
-    
     var numberOfSections: Int {
         return 1
     }
@@ -26,7 +25,6 @@ extension RowListViewModel {
         let row = self.rows[index]
         return RowViewModel(row)
     }
-    
 }
 
 struct RowViewModel {
