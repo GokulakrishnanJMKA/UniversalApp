@@ -64,10 +64,10 @@ class ViewController: UIViewController {
         Webservice().getRows(url: url) { rows in
              if let rows = rows {
                    self.rowListVM = RowListViewModel(rows: rows)
-                   DispatchQueue.main.async {
-                    self.navigationItem.title = ConstantData.navigationTitle
-                       self.tableViewRows.reloadData()
+                   DispatchQueue.main.async { [weak self] in
                        UIViewController.removeSpinner(spinner: sv)
+                       self?.navigationItem.title = ConstantData.navigationTitle
+                       self?.tableViewRows.reloadData()
                     }
               }
          }
