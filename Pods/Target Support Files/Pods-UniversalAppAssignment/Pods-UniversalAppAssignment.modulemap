@@ -1,0 +1,6 @@
+framework module Pods_UniversalAppAssignment {
+  umbrella header "Pods-UniversalAppAssignment-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -1,0 +1,6 @@
+framework module Pods_UniversalAppAssignmentTests {
+  umbrella header "Pods-UniversalAppAssignmentTests-umbrella.h"
+
+  export *
+  module * { export * }
+}
